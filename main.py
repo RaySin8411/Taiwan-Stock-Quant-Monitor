@@ -51,8 +51,8 @@ def main():
     os.makedirs(report_dir, exist_ok=True)
     os.makedirs(plot_dir, exist_ok=True)
 
-    # 存檔與顯示 (指定路徑到 data/ 下)
-    file_path = os.path.join(output_dir, "stock_analysis_result.csv")
+    # 存檔與顯示 (指定路徑到 data/reports 下)
+    file_path = os.path.join(report_dir, "stock_analysis_result.csv")
     results_df = pd.DataFrame(all_results)
     results_df.to_csv(file_path, index=False)
 

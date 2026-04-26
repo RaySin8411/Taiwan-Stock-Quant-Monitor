@@ -82,7 +82,7 @@ class TechIndicatorAnalyzer:
         plt.tight_layout()
 
         # 儲存圖片 (存到 data/plots 之下)
-        plot_path = os.path.join(save_dir, f"{symbol}_analysis.png")
+        plot_path = os.path.join(save_dir, f"{symbol[0:4]}_analysis.png")
         plt.savefig(plot_path)
         print(f"📈 圖表已生成: {plot_path}")
 
