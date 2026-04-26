@@ -1,5 +1,6 @@
 import talib
 import pandas as pd
+import matplotlib.pyplot as plt
 
 
 class TechIndicatorAnalyzer:
@@ -47,3 +48,43 @@ class TechIndicatorAnalyzer:
         elif p_di_prev > m_di_prev and p_di_now < m_di_now:
             return "DEATH_CROSS"
         return "WAIT"
+
+    def plot_dmi(self, df, symbol):
+        """
+        產出 DMI 與價格對照圖並儲存至 data/
+        """
+        # 建立一個包含兩個子圖的視圖 (15x10 比例)
+        fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(15, 10), sharex=True,
+                                       gridspec_kw={'height_ratios': [3, 2]})
+
+        # --- 子圖 1: 價格走勢 ---
+        ax1.plot(df.index, df['Close'], label='Close Price', color='blue', alpha=0.6)
+        ax1.set_title(f"Stock Analysis: {symbol}", fontsize=16)
+        ax1.set_ylabel("Price")
+        ax1.legend(loc='upper left')
+        ax1.grid(True, which='both', linestyle='--', alpha=0.5)
+
+        # --- 子圖 2: DMI 指標 ---
+        ax2.plot(df.index, df['plus_di'], label='+DI (Bullish)', color='red', linewidth=1.5)
+        ax2.plot(df.index, df['minus_di'], label='-DI (Bearish)', color='green', linewidth=1.5)
+        ax2.plot(df.index, df['adx'], label='ADX (Strength)', color='orange', linestyle='--', linewidth=2)
+
+        # 加上 ADX=25 的基準線
+        ax2.axhline(y=25, color='black', linestyle=':', alpha=0.7, label='Trend Threshold (25)')
+
+        ax2.set_ylabel("DMI / ADX Value")
+        ax2.set_xlabel("Date")
+        ax2.legend(loc='upper left')
+        ax2.grid(True, which='both', linestyle='--', alpha=0.5)
+
+        # 自動調整佈局
+        plt.tight_layout()
+
+        # 儲存圖片 (存到 data/ 之下)
+        plot_path = f"data/{symbol}_analysis.png"
+        plt.savefig(plot_path)
+        print(f"📈 圖表已生成: {plot_path}")
+
+        # 如果是在 IDE (PyCharm) 執行，可以加上這行彈出視窗
+        # plt.show()
+        plt.close()  # 關閉畫布釋放記憶體

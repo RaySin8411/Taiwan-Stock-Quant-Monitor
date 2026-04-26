@@ -20,6 +20,9 @@ def main():
 
             # 計算指標
             df = analyzer.calculate_dmi(df)
+
+            analyzer.plot_dmi(df, symbol)
+
             signal = analyzer.get_signal(df)
 
             # 收集關鍵數據
