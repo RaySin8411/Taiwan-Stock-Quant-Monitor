@@ -1,3 +1,4 @@
+import os
 import talib
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -49,7 +50,7 @@ class TechIndicatorAnalyzer:
             return "DEATH_CROSS"
         return "WAIT"
 
-    def plot_dmi(self, df, symbol):
+    def plot_dmi(self, df, symbol, save_dir="data/plots"):
         """
         產出 DMI 與價格對照圖並儲存至 data/
         """
@@ -80,8 +81,8 @@ class TechIndicatorAnalyzer:
         # 自動調整佈局
         plt.tight_layout()
 
-        # 儲存圖片 (存到 data/ 之下)
-        plot_path = f"data/{symbol}_analysis.png"
+        # 儲存圖片 (存到 data/plots 之下)
+        plot_path = os.path.join(save_dir, f"{symbol}_analysis.png")
         plt.savefig(plot_path)
         print(f"📈 圖表已生成: {plot_path}")
 
