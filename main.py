@@ -1,16 +1,48 @@
-# This is a sample Python script.
-
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
-
-
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+import yfinance as yf
+import pandas as pd
+from src.core import TechIndicatorAnalyzer
+from datetime import datetime
 
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
+def main():
+    stock_list = ["6451.TW", "2330.TW", "2454.TW", "3163.TWO"]
+    analyzer = TechIndicatorAnalyzer()
+    all_results = []
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    print(f"--- 啟動台股量化監控系統 ({datetime.now().strftime('%Y-%m-%d')}) ---")
+
+    for symbol in stock_list:
+        try:
+            # 擷取數據
+            df = yf.download(symbol, period="90d", interval="1d", progress=False, auto_adjust=True)
+            if df.empty: continue
+
+            # 計算指標
+            df = analyzer.calculate_dmi(df)
+            signal = analyzer.get_signal(df)
+
+            # 收集關鍵數據
+            curr = df.iloc[-1]
+            all_results.append({
+                "Symbol": symbol,
+                "Plus_DI": round(curr['plus_di'].item(), 2),
+                "Minus_DI": round(curr['minus_di'].item(), 2),
+                "ADX": round(curr['adx'].item(), 2),
+                "Signal": signal
+            })
+            print(f"Checked {symbol}: {signal}")
+
+        except Exception as e:
+            print(f"Error checking {symbol}: {e}")
+
+    # 存檔與顯示
+    results_df = pd.DataFrame(all_results)
+    results_df.to_csv("stock_analysis_result.csv", index=False)
+
+    print("\n--- 分析摘要 ---")
+    print(results_df)
+    print(f"\n產業平均趨勢強度 (ADX Avg): {results_df['ADX'].mean():.2f}")
+
+
+if __name__ == "__main__":
+    main()
