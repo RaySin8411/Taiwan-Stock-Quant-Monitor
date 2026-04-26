@@ -1,3 +1,4 @@
+import os
 import yfinance as yf
 import pandas as pd
 from src.core import TechIndicatorAnalyzer
@@ -35,9 +36,17 @@ def main():
         except Exception as e:
             print(f"Error checking {symbol}: {e}")
 
-    # 存檔與顯示
+    # 確保 data 資料夾存在
+    output_dir = "data"
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+
+    # 存檔與顯示 (指定路徑到 data/ 下)
+    file_path = os.path.join(output_dir, "stock_analysis_result.csv")
     results_df = pd.DataFrame(all_results)
-    results_df.to_csv("stock_analysis_result.csv", index=False)
+    results_df.to_csv(file_path, index=False)
+
+    print(f"\n✅ 分析結果已存至: {file_path}")
 
     print("\n--- 分析摘要 ---")
     print(results_df)
