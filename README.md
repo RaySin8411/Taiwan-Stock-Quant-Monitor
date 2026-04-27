@@ -14,6 +14,8 @@
 - **視覺化診斷**：自動產出包含價格走勢與 DMI/ADX 三線對照的分析圖表，便於快速決策。
 
 ## 🛠️ 快速上手 (Quick Start)
+> 🤖 本專案由 GitHub Actions 每日下午 2:00 自動執行。
+> [👉 點擊此處查看最新產出的圖表與報表 (daily-results 分支)](https://github.com/RaySin8411/Taiwan-Stock-Quant-Monitor/tree/daily-results/data)
 
 ### 1. 環境建置
 建議使用虛擬環境 (venv) 以確保依賴隔離：
