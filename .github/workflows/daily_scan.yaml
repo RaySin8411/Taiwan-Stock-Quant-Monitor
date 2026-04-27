@@ -45,11 +45,14 @@ jobs:
         git config --local user.email "github-actions[bot]@users.noreply.github.com"
         git config --local user.name "github-actions[bot]"
           
-        # 強制切換到一個名為 'daily-results' 的分支 (如果不存在就建立)
+        # 切換分支
         git checkout -b daily-results || git checkout daily-results
           
-        git add data/
-        git commit -m "auto: daily stock analysis $(date +'%Y-%m-%d')" || echo "No changes"
+        # 使用 -f 強制加入被 .gitignore 忽略的資料夾
+        git add -f data/reports/ data/plots/
           
-        # 推送到遠端的 daily-results 分支
+        # 也可以順便把 logs 加進去（如果你想看雲端執行的日誌）
+        git add -f logs/
+          
+        git commit -m "auto: daily stock analysis $(date +'%Y-%m-%d')" || echo "No changes"
         git push origin daily-results --force
