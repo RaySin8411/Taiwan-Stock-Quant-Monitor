@@ -1,8 +1,12 @@
 import os
 import talib
+import matplotlib
 import pandas as pd
 import matplotlib.pyplot as plt
 from src.logger_config import logger
+
+# 強制使用 Agg 後端，避免在無顯示器的 Linux 環境出錯
+matplotlib.use('Agg')
 
 class TechIndicatorAnalyzer:
     """專業技術指標分析類別"""
@@ -55,6 +59,11 @@ class TechIndicatorAnalyzer:
         產出 DMI 與價格對照圖並儲存至 data/
         """
         try:
+            # 確保資料夾存在，不管是本地還是雲端
+            if not os.path.exists(save_dir):
+                os.makedirs(save_dir, exist_ok=True)
+                logger.info(f"建立目錄: {save_dir}")
+
             # 建立一個包含兩個子圖的視圖 (15x10 比例)
             fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(15, 10), sharex=True,
                                            gridspec_kw={'height_ratios': [3, 2]})
