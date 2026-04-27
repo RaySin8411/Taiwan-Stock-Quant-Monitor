@@ -1,0 +1,55 @@
+name: Daily Stock Analysis
+
+on:
+  schedule:
+    # 星期一到五，UTC 時間 06:00 (台灣時間 14:00) 跑一次
+    # Cron 格式: 分 時 日 月 週
+    - cron: '0 6 * * 1-5'
+  workflow_dispatch: # 允許手動點擊按鈕執行測試
+
+jobs:
+  build-and-run:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v3
+      with:
+        ref: main  # 指定從 main 抓取程式碼邏輯
+
+    - name: Set up Python
+      uses: actions/checkout@v3
+      with:
+        python-version: '3.11'
+
+    - name: Install TA-Lib
+      run: |
+        wget http://prdownloads.sourceforge.net/ta-lib/ta-lib-0.4.0-src.tar.gz
+        tar -xzf ta-lib-0.4.0-src.tar.gz
+        cd ta-lib/
+        ./configure --prefix=/usr
+        make
+        sudo make install
+        cd ..
+
+    - name: Install Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Run Analysis
+      run: python main.py
+
+    - name: Commit and Push results
+      run: |
+        git config --local user.email "github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions[bot]"
+          
+        # 強制切換到一個名為 'daily-results' 的分支 (如果不存在就建立)
+        git checkout -b daily-results || git checkout daily-results
+          
+        git add data/
+        git commit -m "auto: daily stock analysis $(date +'%Y-%m-%d')" || echo "No changes"
+          
+        # 推送到遠端的 daily-results 分支
+        git push origin daily-results --force
