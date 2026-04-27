@@ -2,7 +2,7 @@ import os
 import talib
 import pandas as pd
 import matplotlib.pyplot as plt
-
+from src.logger_config import logger
 
 class TechIndicatorAnalyzer:
     """專業技術指標分析類別"""
@@ -54,38 +54,42 @@ class TechIndicatorAnalyzer:
         """
         產出 DMI 與價格對照圖並儲存至 data/
         """
-        # 建立一個包含兩個子圖的視圖 (15x10 比例)
-        fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(15, 10), sharex=True,
-                                       gridspec_kw={'height_ratios': [3, 2]})
+        try:
+            # 建立一個包含兩個子圖的視圖 (15x10 比例)
+            fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(15, 10), sharex=True,
+                                           gridspec_kw={'height_ratios': [3, 2]})
 
-        # --- 子圖 1: 價格走勢 ---
-        ax1.plot(df.index, df['Close'], label='Close Price', color='blue', alpha=0.6)
-        ax1.set_title(f"Stock Analysis: {symbol}", fontsize=16)
-        ax1.set_ylabel("Price")
-        ax1.legend(loc='upper left')
-        ax1.grid(True, which='both', linestyle='--', alpha=0.5)
+            # --- 子圖 1: 價格走勢 ---
+            ax1.plot(df.index, df['Close'], label='Close Price', color='blue', alpha=0.6)
+            ax1.set_title(f"Stock Analysis: {symbol}", fontsize=16)
+            ax1.set_ylabel("Price")
+            ax1.legend(loc='upper left')
+            ax1.grid(True, which='both', linestyle='--', alpha=0.5)
 
-        # --- 子圖 2: DMI 指標 ---
-        ax2.plot(df.index, df['plus_di'], label='+DI (Bullish)', color='red', linewidth=1.5)
-        ax2.plot(df.index, df['minus_di'], label='-DI (Bearish)', color='green', linewidth=1.5)
-        ax2.plot(df.index, df['adx'], label='ADX (Strength)', color='orange', linestyle='--', linewidth=2)
+            # --- 子圖 2: DMI 指標 ---
+            ax2.plot(df.index, df['plus_di'], label='+DI (Bullish)', color='red', linewidth=1.5)
+            ax2.plot(df.index, df['minus_di'], label='-DI (Bearish)', color='green', linewidth=1.5)
+            ax2.plot(df.index, df['adx'], label='ADX (Strength)', color='orange', linestyle='--', linewidth=2)
 
-        # 加上 ADX=25 的基準線
-        ax2.axhline(y=25, color='black', linestyle=':', alpha=0.7, label='Trend Threshold (25)')
+            # 加上 ADX=25 的基準線
+            ax2.axhline(y=25, color='black', linestyle=':', alpha=0.7, label='Trend Threshold (25)')
 
-        ax2.set_ylabel("DMI / ADX Value")
-        ax2.set_xlabel("Date")
-        ax2.legend(loc='upper left')
-        ax2.grid(True, which='both', linestyle='--', alpha=0.5)
+            ax2.set_ylabel("DMI / ADX Value")
+            ax2.set_xlabel("Date")
+            ax2.legend(loc='upper left')
+            ax2.grid(True, which='both', linestyle='--', alpha=0.5)
 
-        # 自動調整佈局
-        plt.tight_layout()
+            # 自動調整佈局
+            plt.tight_layout()
 
-        # 儲存圖片 (存到 data/plots 之下)
-        plot_path = os.path.join(save_dir, f"{symbol[0:4]}_analysis.png")
-        plt.savefig(plot_path)
-        print(f"📈 圖表已生成: {plot_path}")
+            # 儲存圖片 (存到 data/plots 之下)
+            plot_path = os.path.join(save_dir, f"{symbol[0:4]}_analysis.png")
+            plt.savefig(plot_path)
 
-        # 如果是在 IDE (PyCharm) 執行，可以加上這行彈出視窗
-        # plt.show()
-        plt.close()  # 關閉畫布釋放記憶體
+            # 如果是在 IDE (PyCharm) 執行，可以加上這行彈出視窗
+            # plt.show()
+            plt.close()  # 關閉畫布釋放記憶體
+            logger.info(f"📊 視覺化圖表已生成並儲存至: {plot_path}")
+        except Exception as e:
+            # 如果繪圖失敗（例如記憶體不足或路徑權限問題），紀錄錯誤但不中斷主程式
+            logger.error(f"❌ 無法為 {symbol} 生成圖表: {str(e)}")
