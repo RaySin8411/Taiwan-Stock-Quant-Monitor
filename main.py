@@ -2,7 +2,7 @@ import os
 import yfinance as yf
 import pandas as pd
 from src.core import TechIndicatorAnalyzer
-from datetime import datetime
+from src.logger_config import logger
 
 
 def main():
@@ -10,13 +10,15 @@ def main():
     analyzer = TechIndicatorAnalyzer()
     all_results = []
 
-    print(f"--- 啟動台股量化監控系統 ({datetime.now().strftime('%Y-%m-%d')}) ---")
+    logger.info("台股量化監控系統啟動...")
 
     for symbol in stock_list:
         try:
             # 擷取數據
             df = yf.download(symbol, period="90d", interval="1d", progress=False, auto_adjust=True)
-            if df.empty: continue
+            if df.empty:
+                logger.warning(f"標的 {symbol} 抓取不到資料，跳過。")
+                continue
 
             # 計算指標
             df = analyzer.calculate_dmi(df)
@@ -34,10 +36,10 @@ def main():
                 "ADX": round(curr['adx'].item(), 2),
                 "Signal": signal
             })
-            print(f"Checked {symbol}: {signal}")
+            logger.info(f"分析完成: {symbol} | 訊號: {signal}")
 
         except Exception as e:
-            print(f"Error checking {symbol}: {e}")
+            logger.error(f"分析 {symbol} 時發生異常: {str(e)}", exc_info=True)
 
     # 確保 data 資料夾存在
     output_dir = "data"
@@ -56,7 +58,7 @@ def main():
     results_df = pd.DataFrame(all_results)
     results_df.to_csv(file_path, index=False)
 
-    print(f"\n✅ 分析結果已存至: {file_path}")
+    logger.info(f"全數分析完畢，結果已存至 reports 資料夾。")
 
     print("\n--- 分析摘要 ---")
     print(results_df)
