@@ -40,6 +40,12 @@ jobs:
     - name: Run Analysis
       run: python main.py
 
+    # ====== 🆕 新增步驟：生成網頁 ======
+    - name: Generate HTML for Pages
+      run: python build_pages.py
+      # 此步驟會讀取 data/plots/，產生 index.html 到根目錄
+    # =================================
+
     - name: Commit and Push results
       run: |
         git config --local user.email "github-actions[bot]@users.noreply.github.com"
@@ -50,6 +56,7 @@ jobs:
           
         # 使用 -f 強制加入被 .gitignore 忽略的資料夾
         git add -f data/reports/ data/plots/
+        git add -f index.html
           
         # 也可以順便把 logs 加進去（如果你想看雲端執行的日誌）
         git add -f logs/
