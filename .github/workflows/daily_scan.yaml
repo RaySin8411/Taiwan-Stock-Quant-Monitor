@@ -11,6 +11,9 @@ jobs:
   build-and-run:
     runs-on: ubuntu-latest
 
+    # 賦予 Action 寫入權限
+    permissions:
+      contents: write
     steps:
     - name: Checkout Code
       uses: actions/checkout@v3
@@ -55,7 +58,7 @@ jobs:
         git checkout -b daily-results || git checkout daily-results
           
         # 使用 -f 強制加入被 .gitignore 忽略的資料夾
-        git add -f data/reports/ data/plots/
+        git add -f data/reports/ data/plots/*.png
         git add -f index.html
           
         # 也可以順便把 logs 加進去（如果你想看雲端執行的日誌）

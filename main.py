@@ -6,7 +6,18 @@ from src.logger_config import logger
 
 
 def main():
-    stock_list = ["6451.TW", "2330.TW", "2454.TW", "3163.TWO"]
+    # 讀取配置
+    stocks_df = pd.read_csv("config/stocks.csv")
+    stock_list = []
+    for index, row in stocks_df.iterrows():
+        code = str(row['code'])
+        name = row['name']
+        market = row['market']  # 這是 TW 或 TWO
+
+        # 組合 yfinance 要的代號
+        full_code = f"{code}.{market}"
+        stock_list.append(full_code)
+
     analyzer = TechIndicatorAnalyzer()
     all_results = []
 

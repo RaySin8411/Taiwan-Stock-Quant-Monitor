@@ -1,16 +1,29 @@
 import os
 import glob
+import pandas as pd
 from datetime import datetime
 
 # 設定資料夾路徑
-PLOT_DIR = 'data/plots'
 HTML_FILE = 'index.html'
 
+# 讀取配置檔，建立對照表
+def get_stock_map():
+    try:
+        # 讀取 CSV
+        df = pd.read_csv("config/stocks.csv")
+        # 建立字典，例如：{'2330': '台積電', '3163': '波若威'}
+        # 確保 code 是字串，避免匹配失敗
+        return pd.Series(df.name.values, index=df.code.astype(str)).to_dict()
+    except Exception as e:
+        print(f"讀取配置檔失敗: {e}")
+        return {}
 
 def generate_html():
     """
     掃描 data/plots 下的 PNG 檔案，並生成 index.html。
     """
+    PLOT_DIR = 'data/plots'
+    stock_map = get_stock_map()
     # 1. 抓取所有圖片檔案 (依檔名排序，確保順序一致)
     image_files = sorted(glob.glob(os.path.join(PLOT_DIR, '*.png')))
 
@@ -18,17 +31,21 @@ def generate_html():
     image_tags = ""
     for img_path in image_files:
         # 取得股票名稱 (例如: 從 data/plots/2330_analysis.png 取得 2330)
-        stock_name = os.path.basename(img_path).replace('_analysis.png', '')
-
+        filename = os.path.basename(img_path)
+        stock_code = filename.split('_')[0]
+        # 根據代號找中文名稱，找不到就用原代號
+        stock_display_name = stock_map.get(stock_code, stock_code)
         # 這裡是 GitHub Pages 的眉角：圖片路徑要用相對路徑
         # 網頁跟圖片都在 daily-results 分支下，所以路徑直接用 'data/plots/...'
         image_tags += f"""
-        <div class="card mb-4 shadow-sm">
-            <div class="card-header">
-                <h3 class="my-0 font-weight-normal">📈 {stock_name} 分析圖表</h3>
-            </div>
-            <div class="card-body">
-                <img src="{img_path}" class="img-fluid" alt="{stock_name}">
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-header">
+                    <h5 class="my-0 font-weight-normal">📈 {stock_display_name} ({stock_code})</h5>
+                </div>
+                <div class="card-body d-flex align-items-center">
+                    <img src="{img_path}" class="img-fluid" alt="{stock_display_name}">
+                </div>
             </div>
         </div>
         """
@@ -59,8 +76,9 @@ def generate_html():
         <hr>
       </div>
 
-      <div class="card-deck mb-3 text-center">
-        {image_tags if image_tags else "<p class='alert alert-warning'>⚠️ 今日尚無圖表產出。</p>"}
+      <!-- 這裡改用 row，Bootstrap 會自動幫我們換行 -->
+      <div class="row">
+        {image_tags if image_tags else "<div class='col-12 text-center'><p class='alert alert-warning'>⚠️ 今日尚無圖表產出。</p></div>"}
       </div>
 
       <footer class="pt-4 my-md-5 pt-md-5 border-top">
