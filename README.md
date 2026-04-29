@@ -11,11 +11,16 @@
 - **工業級技術指標**：採用 `TA-Lib` 進行高性能數學運算，確保指標精度。
 - **資料分層架構**：嚴謹的目錄組織，分離原始碼 (`src/`)、分析報表 (`data/reports/`) 與視覺化圖表 (`data/plots/`)。
 - **物件導向設計 (OOP)**：將計算邏輯封裝於 `TechIndicatorAnalyzer` 類別，具備高擴展性與可測試性。
-- **視覺化診斷**：自動產出包含價格走勢與 DMI/ADX 三線對照的分析圖表，便於快速決策。
+- **視覺化診斷**：自動產出包含價格走勢與 `DMI/ADX` 三線對照的分析圖表，便於快速決策。
+- **配置化管理 (Config-Driven)**：透過 `config/stocks.csv` 輕鬆管理監控清單，實現邏輯與資料分離。
+
+- **動態儀表板 (Live Dashboard)**：結合 `GitHub Pages` 與 `Bootstrap`，每日自動更新視覺化分析網頁。
+
 
 ## 🛠️ 快速上手 (Quick Start)
 > 🤖 本專案由 GitHub Actions 每日下午 2:00 自動執行。
-> [👉 點擊此處查看最新產出的圖表與報表 (daily-results 分支)](https://github.com/RaySin8411/Taiwan-Stock-Quant-Monitor/tree/daily-results/data)
+> 
+> [👉 點擊此處查看動態儀表板 (Live Dashboard)](https://raysin8411.github.io/Taiwan-Stock-Quant-Monitor/)
 
 ### 1. 環境建置
 建議使用虛擬環境 (venv) 以確保依賴隔離：
@@ -42,6 +47,9 @@ python -m unittest discover tests
 
 ```text
 Taiwan-Stock-Quant-Monitor/
+├── config/             # 策略配置
+│   └── stocks.csv      # 追蹤標的清單 (代碼,名稱,市場)
+├── build_pages.py      # 自動化網頁生成腳本
 ├── data/               # 數據輸出目錄
 │   ├── reports/        # 存放分析彙整 CSV (例如: stock_analysis_result.csv)
 │   └── plots/          # 存放分析圖表 PNG (例如: 2330.TW_analysis.png)
