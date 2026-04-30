@@ -33,6 +33,9 @@ class TechIndicatorAnalyzer:
         df['minus_di'] = talib.MINUS_DI(high, low, close, timeperiod=self.timeperiod)
         df['adx'] = talib.ADX(high, low, close, timeperiod=self.timeperiod)
 
+        # MA20
+        df['MA20'] = df['Close'].rolling(20).mean()
+
         return df
 
     def get_signal(self, df):
