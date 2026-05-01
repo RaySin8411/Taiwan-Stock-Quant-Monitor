@@ -21,7 +21,7 @@ jobs:
         ref: main  # 指定從 main 抓取程式碼邏輯
 
     - name: Set up Python
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         python-version: '3.11'
 
@@ -42,6 +42,15 @@ jobs:
 
     - name: Run Analysis
       run: python main.py
+
+    # ====== 🆕 新增步驟：Telegram 掃描與通知 ======
+    - name: Run Telegram Stock Scanner
+      env:
+        # 從 GitHub Secrets 抓取資料映射給 Python
+        TG_TOKEN: ${{ secrets.TG_TOKEN }}
+        TG_CHAT_ID: ${{ secrets.TG_CHAT_ID }}
+      run: python scanner.py
+    # ================================
 
     # ====== 🆕 新增步驟：生成網頁 ======
     - name: Generate HTML for Pages
