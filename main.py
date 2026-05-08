@@ -16,7 +16,7 @@ def main():
 
         # 組合 yfinance 要的代號
         full_code = f"{code}.{market}"
-        stock_list.append(full_code)
+        stock_list.append([full_code,name])
 
     analyzer = TechIndicatorAnalyzer()
     all_results = []
@@ -26,15 +26,15 @@ def main():
     for symbol in stock_list:
         try:
             # 擷取數據
-            df = yf.download(symbol, period="90d", interval="1d", progress=False, auto_adjust=True)
+            df = yf.download(symbol[0], period="90d", interval="1d", progress=False, auto_adjust=True)
             if df.empty:
-                logger.warning(f"標的 {symbol} 抓取不到資料，跳過。")
+                logger.warning(f"標的 {symbol[0]} 抓取不到資料，跳過。")
                 continue
 
             # 計算指標
             df = analyzer.calculate_dmi(df)
-
-            analyzer.plot_dmi(df, symbol)
+            analyzer.plot_dmi(df, symbol[0])
+            analyzer.generate_diagnostic_plot(df, symbol)
 
             signal = analyzer.get_signal(df)
 

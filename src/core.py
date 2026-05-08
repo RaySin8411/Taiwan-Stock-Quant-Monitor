@@ -3,6 +3,7 @@ import talib
 import matplotlib
 import pandas as pd
 import matplotlib.pyplot as plt
+import mplfinance as mpf
 from src.logger_config import logger
 
 # 強制使用 Agg 後端，避免在無顯示器的 Linux 環境出錯
@@ -105,3 +106,34 @@ class TechIndicatorAnalyzer:
         except Exception as e:
             # 如果繪圖失敗（例如記憶體不足或路徑權限問題），紀錄錯誤但不中斷主程式
             logger.error(f"❌ 無法為 {symbol} 生成圖表: {str(e)}")
+
+    def generate_diagnostic_plot(self, df, symbol):
+        """產生專業 K 棒診斷圖"""
+        stock_id = symbol[0][0:4]
+        # 準備副圖資料：DMI 三線放在 Panel 1 (下方)
+        apds = [
+            mpf.make_addplot(df['plus_di'], color='red', panel=1, secondary_y=False),
+            mpf.make_addplot(df['minus_di'], color='green', panel=1, secondary_y=False),
+            mpf.make_addplot(df['adx'], color='orange', width=2, panel=1, secondary_y=False),
+            mpf.make_addplot(df['MA20'], color='blue', width=1, panel=0)  # MA20 畫在主圖
+        ]
+
+        # 設定台股習慣顏色：紅漲綠跌
+        mc = mpf.make_marketcolors(up='red', down='green', edge='inherit', wick='inherit', volume='in')
+        s = mpf.make_mpf_style(marketcolors=mc, gridstyle='--')
+
+        save_dir = f"data/plots/{stock_id}.png"
+        # 繪圖
+        mpf.plot(
+            df,
+            type='candle',
+            addplot=apds,
+            volume=True,
+            figratio=(16, 9),
+            figscale=1.2,
+            title=f"\n{stock_id}",
+            style=s,
+            panel_ratios=(3, 1),  # 主圖與副圖的高度比例
+            savefig=dict(fname=save_dir, dpi=100, bbox_inches='tight')
+        )
+        logger.info(f"📊 視覺化圖表已生成並儲存至: {save_dir}")
