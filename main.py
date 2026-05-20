@@ -33,7 +33,7 @@ def main():
 
             # 計算指標
             df = analyzer.calculate_dmi(df)
-            analyzer.plot_dmi(df, symbol[0])
+            # analyzer.plot_dmi(df, symbol[0])
             analyzer.generate_diagnostic_plot(df, symbol)
 
             signal = analyzer.get_signal(df)
