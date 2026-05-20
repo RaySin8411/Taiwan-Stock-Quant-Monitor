@@ -6,6 +6,18 @@ from src.logger_config import logger
 
 
 def main():
+    # 確保 data 資料夾存在
+    output_dir = "data"
+    os.makedirs(output_dir, exist_ok=True)
+
+     # 定義路徑
+    report_dir = os.path.join(output_dir , "reports")
+    plot_dir = os.path.join(output_dir , "plots")
+
+    # 確保子資料夾存在 (exist_ok=True 可以簡化寫法)
+    os.makedirs(report_dir, exist_ok=True)
+    os.makedirs(plot_dir, exist_ok=True)
+
     # 讀取配置
     stocks_df = pd.read_csv("config/stocks.csv")
     stock_list = []
@@ -52,17 +64,6 @@ def main():
         except Exception as e:
             logger.error(f"分析 {symbol} 時發生異常: {str(e)}", exc_info=True)
 
-    # 確保 data 資料夾存在
-    output_dir = "data"
-    os.makedirs(output_dir, exist_ok=True)
-
-     # 定義路徑
-    report_dir = os.path.join(output_dir , "reports")
-    plot_dir = os.path.join(output_dir , "plots")
-
-    # 確保子資料夾存在 (exist_ok=True 可以簡化寫法)
-    os.makedirs(report_dir, exist_ok=True)
-    os.makedirs(plot_dir, exist_ok=True)
 
     # 存檔與顯示 (指定路徑到 data/reports 下)
     file_path = os.path.join(report_dir, "stock_analysis_result.csv")
