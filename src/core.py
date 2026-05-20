@@ -112,9 +112,9 @@ class TechIndicatorAnalyzer:
         stock_id = symbol[0][0:4]
         # 準備副圖資料：DMI 三線放在 Panel 1 (下方)
         apds = [
-            mpf.make_addplot(df['plus_di'], color='red', panel=1, secondary_y=False),
-            mpf.make_addplot(df['minus_di'], color='green', panel=1, secondary_y=False),
-            mpf.make_addplot(df['adx'], color='orange', width=2, panel=1, secondary_y=False),
+            mpf.make_addplot(df['plus_di'], color='red', panel=2, secondary_y=False),
+            mpf.make_addplot(df['minus_di'], color='green', panel=2, secondary_y=False),
+            mpf.make_addplot(df['adx'], color='orange', width=2, panel=2, secondary_y=False),
             mpf.make_addplot(df['MA20'], color='blue', width=1, panel=0)  # MA20 畫在主圖
         ]
 
@@ -122,7 +122,7 @@ class TechIndicatorAnalyzer:
         mc = mpf.make_marketcolors(up='red', down='green', edge='inherit', wick='inherit', volume='in')
         s = mpf.make_mpf_style(marketcolors=mc, gridstyle='--')
 
-        save_dir = f"data/plots/{stock_id}.png"
+        save_dir = f"data/plots/{stock_id}_vol.png"
         # 繪圖
         mpf.plot(
             df,
@@ -133,7 +133,7 @@ class TechIndicatorAnalyzer:
             figscale=1.2,
             title=f"\n{stock_id}",
             style=s,
-            panel_ratios=(3, 1),  # 主圖與副圖的高度比例
+            panel_ratios=(4, 1.5, 2),  # 主圖與副圖的高度比例
             savefig=dict(fname=save_dir, dpi=100, bbox_inches='tight')
         )
         logger.info(f"📊 視覺化圖表已生成並儲存至: {save_dir}")
