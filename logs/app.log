@@ -1,0 +1,22 @@
+2026-09-04 10:05:23 - StockMonitor - [INFO] - 台股量化監控系統啟動...
+2026-09-04 10:05:24 - StockMonitor - [INFO] - 📊 視覺化圖表已生成並儲存至: data/plots/2330_vol.png
+2026-09-04 10:05:24 - StockMonitor - [INFO] - 分析完成: ['2330.TW', '台積電'] | 訊號: WAIT
+2026-09-04 10:05:24 - StockMonitor - [INFO] - 📊 視覺化圖表已生成並儲存至: data/plots/2454_vol.png
+2026-09-04 10:05:24 - StockMonitor - [INFO] - 分析完成: ['2454.TW', '聯發科'] | 訊號: WAIT
+2026-09-04 10:05:25 - StockMonitor - [INFO] - 📊 視覺化圖表已生成並儲存至: data/plots/2317_vol.png
+2026-09-04 10:05:25 - StockMonitor - [INFO] - 分析完成: ['2317.TW', '鴻海'] | 訊號: WAIT
+2026-09-04 10:05:25 - StockMonitor - [INFO] - 📊 視覺化圖表已生成並儲存至: data/plots/6451_vol.png
+2026-09-04 10:05:25 - StockMonitor - [INFO] - 分析完成: ['6451.TW', '訊芯-KY'] | 訊號: WAIT
+2026-09-04 10:05:25 - StockMonitor - [INFO] - 📊 視覺化圖表已生成並儲存至: data/plots/3016_vol.png
+2026-09-04 10:05:25 - StockMonitor - [INFO] - 分析完成: ['3016.TW', '嘉晶'] | 訊號: WAIT
+2026-09-04 10:05:26 - StockMonitor - [INFO] - 📊 視覺化圖表已生成並儲存至: data/plots/6442_vol.png
+2026-09-04 10:05:26 - StockMonitor - [INFO] - 分析完成: ['6442.TW', '光聖'] | 訊號: WAIT
+2026-09-04 10:05:26 - StockMonitor - [INFO] - 📊 視覺化圖表已生成並儲存至: data/plots/3163_vol.png
+2026-09-04 10:05:26 - StockMonitor - [INFO] - 分析完成: ['3163.TWO', '波若威'] | 訊號: WAIT
+2026-09-04 10:05:27 - StockMonitor - [INFO] - 📊 視覺化圖表已生成並儲存至: data/plots/3363_vol.png
+2026-09-04 10:05:27 - StockMonitor - [INFO] - 分析完成: ['3363.TWO', '上詮'] | 訊號: WAIT
+2026-09-04 10:05:27 - StockMonitor - [INFO] - 📊 視覺化圖表已生成並儲存至: data/plots/4979_vol.png
+2026-09-04 10:05:27 - StockMonitor - [INFO] - 分析完成: ['4979.TWO', '華星光'] | 訊號: WAIT
+2026-09-04 10:05:28 - StockMonitor - [INFO] - 📊 視覺化圖表已生成並儲存至: data/plots/4908_vol.png
+2026-09-04 10:05:28 - StockMonitor - [INFO] - 分析完成: ['4908.TWO', '前鼎'] | 訊號: WAIT
+2026-09-04 10:05:28 - StockMonitor - [INFO] - 全數分析完畢，結果已存至 reports 資料夾。
